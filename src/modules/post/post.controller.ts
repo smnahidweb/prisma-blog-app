@@ -6,7 +6,17 @@ const createPost = async(req:Request,res:Response)=>{
 
 try{
 
-    const result = await PostServices.createPost(req.body);
+
+    if(!req.user){
+        return res.status(401).json({
+            success: false,
+            message : "Unauthorized access",
+        })  
+    }
+
+
+    const result = await PostServices.createPost(req.body , req.user.id as string);
+    console.log(req.user)
     res.status(201).json(result)
 
 }
